@@ -1,4 +1,6 @@
-from aim5005.features import MinMaxScaler, StandardScaler
+import sys
+sys.path.append("C:/Users/user/Desktop/YU-Semester 2/Machine Learning/Assignment-1/ML_assignment-1/aim5005")
+from aim5005.features import MinMaxScaler, StandardScaler, LabelEncoder
 import numpy as np
 import unittest
 from unittest.case import TestCase
@@ -51,6 +53,7 @@ class TestFeatures(TestCase):
         data = [[0, 0], [0, 0], [1, 1], [1, 1]]
         expected = np.array([[-1., -1.], [-1., -1.], [1., 1.], [1., 1.]])
         scaler.fit(data)
+        result = scaler.transform(data)
         assert (result == expected).all(), "Scaler transform does not return expected values. Expect {}. Got: {}".format(expected.reshape(1,-1), result.reshape(1,-1))
         
     def test_standard_scaler_single_value(self):
@@ -60,8 +63,60 @@ class TestFeatures(TestCase):
         scaler.fit(data)
         result = scaler.transform([[2., 2.]]) 
         assert (result == expected).all(), "Scaler transform does not return expected values. Expect {}. Got: {}".format(expected.reshape(1,-1), result.reshape(1,-1))
-
+'''
     # TODO: Add a test of your own below this line
+    def test_standard_scaler():
+    # Test Case : Simple dataset with two features
+        data = np.array([[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]])
+    
+    # Expected mean and std
+        expected_mean = np.array([2.0, 3.0])
+        expected_std = np.array([1.0, 1.0])
+
+    # Manually scaled expected output
+        expected_transformed = np.array([[-1.0, -1.0], [0.0, 0.0], [1.0, 1.0]])
+    
+    # Initialize and fit StandardScaler
+        scaler = StandardScaler()
+        scaler.fit(data)
+    
+    # Check if the calculated mean and std are correct
+        assert np.allclose(scaler.mean_, expected_mean), f"Expected mean {expected_mean}, got {scaler.mean_}"
+        assert np.allclose(scaler.std_, expected_std), f"Expected std {expected_std}, got {scaler.std_}"
+    
+    # Transform the data
+        X_scaled = scaler.transform(data)
+    # Check if the transformed data is correct
+        assert np.allclose(X_scaled, expected_transformed), f"Expected transformed {expected_transformed}, got {X_scaled}"
+    
+    def test_label_encoder(self):
+    # Initialize the LabelEncoder
+        label_encoder = LabelEncoder()
+        
+        # Input data (categories)
+        data = ['apple', 'banana', 'apple', 'orange']
+        
+        # Fit the LabelEncoder with the data
+        label_encoder.fit(data)
+        
+        # Transform the data
+        result = label_encoder.transform(data)
+        
+        # Expected encoded values
+        expected = np.array([0, 1, 0, 2])  # Assuming 'apple' -> 0, 'banana' -> 1, 'orange' -> 2
+        
+        # Check if the transformed values are correct
+        assert (result == expected).all(), f"Expected {expected}, got {result}"
+        
+        # Test inverse transformation
+        inverse_result = label_encoder.inverse_transform(result)
+        
+        # Expected inverse transformation result
+        expected_inverse = np.array(['apple', 'banana', 'apple', 'orange'])
+        
+        # Check if the inverse transformation is correct
+        assert (inverse_result == expected_inverse).all(), f"Expected {expected_inverse}, got {inverse_result}"
+'''
     
 if __name__ == '__main__':
     unittest.main()
